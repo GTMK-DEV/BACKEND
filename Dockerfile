@@ -1,8 +1,7 @@
 # Eclipse Temurin의 OpenJDK 17을 기반으로 설정
 FROM eclipse-temurin:17-jdk-alpine
 
-# build가 되는 시점에 JAR_FILE이라는 변수 명에 build/libs/*.jar 선언
-ARG JAR_FILE=build/libs/gtmk-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=build/libs/server-0.0.1-SNAPSHOT.jar
 
 # JAR_FILE을 app.jar로 복사
 COPY ${JAR_FILE} app.jar
