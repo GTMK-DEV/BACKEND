@@ -53,25 +53,25 @@ jobs:
     - name: Docker build & push to prod
       run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          docker build -t ${{ secrets.DOCKER_REPO }}/gtmk-server .
+          docker push ${{ secrets.DOCKER_REPO }}/gtmk-server
         
         
 
       ## deploy to develop
     - name: Deploy to dev
       uses: appleboy/ssh-action@master
-      id: deploy-dev
       with:
         username: ubuntu
         host: ${{ secrets.HOST }}
         key: ${{secrets.KEY }}
         port: 22
         script: |
-          sudo docker rm -f $(docker ps -qa)
-          sudo docker pull ${{ secrets.DOCKER_REPO }}/dotoriham-dev
-          docker-compose up -d
-          docker image prune -f
+          sudo docker stop gtmk-server
+          sudo docker rm gtmk-server
+          sudo docker image rm ${{ secrets.DOCKER_REPO }}/gtmk-server
+          sudo docker pull ${{ secrets.DOCKER_REPO }}/gtmk-server
+          sudo docker run -d -p 8080:8080 --name=gtmk-server ${{ secrets.DOCKER_REPO }}/gtmk-server
 
   ## time
   current-time:
