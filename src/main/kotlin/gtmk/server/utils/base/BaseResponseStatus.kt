@@ -6,7 +6,7 @@ enum class BaseResponseStatus(
         val message: String
 ) {
     SUCCESS(false, 2000, "요청에 성공하였습니다."),
-      BAD_REQUEST(true, 3027, "올바르지 않은 입력 형태 입니다."),
+    BAD_REQUEST(true, 3027, "올바르지 않은 입력 형태 입니다."),
     BAD_JSON_FORMAT(true, -2, "잘못된 Json형식입니다."),
 
     INVALID_DATE_TIME_FORM(true, -2, "날짜/시간 형식이 올바르지 않습니다 : yyyy-mm-dd, yyyy-mm-dd hh:mm:ss, hh:mm:ss"),
