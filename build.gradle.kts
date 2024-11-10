@@ -45,8 +45,9 @@ dependencies {
 
 	// jpa
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	// security
-//	implementation("org.springframework.boot:spring-boot-starter-security")
+
+	 // security
+	implementation("org.springframework.boot:spring-boot-starter-security")
 
 
 	// QueryDSL

@@ -1,76 +1,99 @@
-package org.example.hmsspringboot.utils.base
+package gtmk.server.utils.base
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import io.jsonwebtoken.JwtException
-import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException
-import org.example.hmsspringboot.utils.base.BaseResponseStatus.*
-import org.springframework.beans.factory.annotation.Value
+import org.example.hmsspringboot.utils.base.BaseException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.FieldError
-import org.springframework.validation.ObjectError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
-import org.springframework.web.multipart.MultipartException
+
 
 @RestControllerAdvice
-class BaseController {
+class BaseController(
 
-    @Value("\${spring.servlet.multipart.max-file-size}")
-    lateinit var limitSize: String
+) {
 
     @ExceptionHandler(BaseException::class)
-    protected fun handleCustomException(ex: BaseException): ResponseEntity<BaseResponse> {
-        return ResponseEntity(BaseResponse(ex), HttpStatus.OK)
+    fun handleApplicationException(ex: BaseException): ResponseEntity<ErrorResponse> {
+//    fun handleApplicationException(ex: ApplicationException): ResponseEntity<ErrorResponse> {
+        println("!!!!!!baseException: ${ex.message}")
+        return handleException(ex, ex.errorCode,ex.status)
+//        return handleException(ex, ex.getErrorCode(), ex.message!!, ex.httpStatus)
     }
 
+    private fun handleException(
+        ex: Exception,
+        errorCode: ErrorCode,
+        status: HttpStatus
+    ): ResponseEntity<ErrorResponse> {
+
+        println("${ex.javaClass.simpleName}, ${ex.message},")
+
+        val errorResponse = ErrorResponse(errorCode, errorCode.message, status)
+
+        return ResponseEntity(errorResponse,status)
+
+    }
+
+
     @ExceptionHandler(JwtException::class)
-    protected fun handleCustomException(ex: JwtException): ResponseEntity<BaseResponse> {
+    protected fun handleCustomException(ex: JwtException): ResponseEntity<ErrorResponse> {
+        println("!!!!!!here?: ${ex.message}")
+
         val message = ex.message
         val baseResponse = when (message) {
-            INVALID_JWT_TOKEN.message -> setErrorResponse(INVALID_JWT_TOKEN)
-            EXPIRED_JWT_TOKEN.message -> setErrorResponse(EXPIRED_JWT_TOKEN)
-            UNSUPPORTED_JWT_TOKEN.message -> setErrorResponse(UNSUPPORTED_JWT_TOKEN)
-            else -> setErrorResponse(ACCESS_DENIED)
+            ErrorCode.INVALID_JWT_TOKEN.message -> setErrorResponse(ErrorCode.INVALID_JWT_TOKEN)
+            ErrorCode.EXPIRED_JWT_TOKEN.message -> setErrorResponse(ErrorCode.EXPIRED_JWT_TOKEN)
+            ErrorCode.UNSUPPORTED_JWT_TOKEN.message -> setErrorResponse(ErrorCode.UNSUPPORTED_JWT_TOKEN)
+            else -> setErrorResponse(ErrorCode.ACCESS_DENIED)
         }
         return ResponseEntity(baseResponse, HttpStatus.UNAUTHORIZED)
     }
 
-    private fun setErrorResponse(status: BaseResponseStatus): BaseResponse {
-        return BaseResponse(status.isError, status.message, status.code)
+    private fun setErrorResponse(errorCode: ErrorCode): ErrorResponse {
+        return ErrorResponse(errorCode)
     }
 
     @ExceptionHandler(HttpMessageNotReadableException::class)
-    protected fun jsonErrorCustomException(e: HttpMessageNotReadableException): ResponseEntity<BaseResponse> {
+    protected fun jsonErrorCustomException(e: HttpMessageNotReadableException): ResponseEntity<ErrorResponse> {
+        println("!!!!!!here?: ${e.message}")
+
         val cause = e.cause
+
         if (cause is MismatchedInputException) {
             val path = cause.path
             if (path != null && path.isNotEmpty()) {
-                val msg = String.format(path[0].fieldName, INVALID_FORMAT)
-                return ResponseEntity(BaseException(INVALID_FORMAT, msg).get(), HttpStatus.OK)
+                val msg = String.format(path[0].fieldName, ErrorCode.INVALID_FORMAT)
+                return ResponseEntity(setErrorResponse(ErrorCode.INVALID_FORMAT),HttpStatus.BAD_REQUEST)
             }
         }
-        return ResponseEntity(BaseException(BAD_JSON_FORMAT).get(), HttpStatus.OK)
+        return ResponseEntity(setErrorResponse(ErrorCode.BAD_JSON_FORMAT),HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<BaseResponse> {
+    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
+        println("!!!!!!he::re?: ${e.message}")
+
         val errors = e.bindingResult.allErrors
         val errorFields = errors
                 .filterIsInstance<FieldError>()
                 .map { it.field }
 
         val errorMessage = errorFields.toString()
-        return ResponseEntity(BaseException(BAD_REQUEST, errorMessage).get(), HttpStatus.OK)
+        return ResponseEntity(setErrorResponse(ErrorCode.INVALID_FORMAT),HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
-    fun handleMethodArgumentTypeMismatchException(e: MethodArgumentTypeMismatchException): ResponseEntity<BaseResponse> {
+    fun handleMethodArgumentTypeMismatchException(e: MethodArgumentTypeMismatchException): ResponseEntity<ErrorResponse> {
+        println("!!!!!!her???e?: ${e.message}")
+
         val errorMessage = e.name
-        return ResponseEntity(BaseException(INVALID_DATE_TIME_FORM, errorMessage).get(), HttpStatus.OK)
+        return ResponseEntity(setErrorResponse(ErrorCode.INVALID_DATE_TIME_FORM),HttpStatus.BAD_REQUEST)
     }
 
 }

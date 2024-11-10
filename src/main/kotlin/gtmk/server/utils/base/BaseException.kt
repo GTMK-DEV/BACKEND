@@ -1,26 +1,27 @@
 package org.example.hmsspringboot.utils.base
 
+import gtmk.server.utils.base.ErrorCode
+import org.springframework.http.HttpStatus
+
 class BaseException : RuntimeException {
 
-        val error: Boolean
-        val code: Int
+        val errorCode: ErrorCode
+        var status: HttpStatus
 
-        constructor(baseResponseStatus: BaseResponseStatus) : super(baseResponseStatus.message) {
-                this.error = baseResponseStatus.isError
-                this.code = baseResponseStatus.code
+        constructor(errorCode: ErrorCode) : super(errorCode.message) {
+                this.errorCode = errorCode
+                this.status = HttpStatus.valueOf(errorCode.status)
         }
 
-        constructor(baseResponseStatus: BaseResponseStatus, message: String) : super(message) {
-                this.error = baseResponseStatus.isError
-                this.code = baseResponseStatus.code
+        constructor(baseResponseStatus: BaseResponseStatus, message: String, errorCode: ErrorCode) : super(message) {
+                this.status=baseResponseStatus.httpStatus
+
+                this.errorCode = errorCode
         }
 
-        constructor(error: Boolean, message: String, code: Int) : super(message) {
-                this.error = error
-                this.code = code
+        constructor(error: Boolean, message: String, code: Int, errorCode: ErrorCode) : super(message) {
+                this.status=HttpStatus.valueOf(code)
+                this.errorCode = errorCode
         }
 
-        fun get(): BaseResponse {
-                return BaseResponse(error, message, code)
-        }
 }
