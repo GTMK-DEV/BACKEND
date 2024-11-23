@@ -1,4 +1,4 @@
-package gtmk.server.utils.users
+package gtmk.server.utils.auth
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.User

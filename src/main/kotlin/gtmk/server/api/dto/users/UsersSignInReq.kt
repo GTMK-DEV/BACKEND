@@ -1,4 +1,4 @@
-package gtmk.server.utils.users
+package gtmk.server.api.dto.users
 
 data class UsersSignInReq (
     val id: String,

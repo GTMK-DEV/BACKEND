@@ -20,10 +20,7 @@ class BaseController(
 
     @ExceptionHandler(BaseException::class)
     fun handleApplicationException(ex: BaseException): ResponseEntity<ErrorResponse> {
-//    fun handleApplicationException(ex: ApplicationException): ResponseEntity<ErrorResponse> {
-        println("!!!!!!baseException: ${ex.message}")
         return handleException(ex, ex.errorCode,ex.status)
-//        return handleException(ex, ex.getErrorCode(), ex.message!!, ex.httpStatus)
     }
 
     private fun handleException(
@@ -43,7 +40,6 @@ class BaseController(
 
     @ExceptionHandler(JwtException::class)
     protected fun handleCustomException(ex: JwtException): ResponseEntity<ErrorResponse> {
-        println("!!!!!!here?: ${ex.message}")
 
         val message = ex.message
         val baseResponse = when (message) {
@@ -61,8 +57,6 @@ class BaseController(
 
     @ExceptionHandler(HttpMessageNotReadableException::class)
     protected fun jsonErrorCustomException(e: HttpMessageNotReadableException): ResponseEntity<ErrorResponse> {
-        println("!!!!!!here?: ${e.message}")
-
         val cause = e.cause
 
         if (cause is MismatchedInputException) {
@@ -77,7 +71,6 @@ class BaseController(
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
-        println("!!!!!!he::re?: ${e.message}")
 
         val errors = e.bindingResult.allErrors
         val errorFields = errors
@@ -90,7 +83,6 @@ class BaseController(
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
     fun handleMethodArgumentTypeMismatchException(e: MethodArgumentTypeMismatchException): ResponseEntity<ErrorResponse> {
-        println("!!!!!!her???e?: ${e.message}")
 
         val errorMessage = e.name
         return ResponseEntity(setErrorResponse(ErrorCode.INVALID_DATE_TIME_FORM),HttpStatus.BAD_REQUEST)

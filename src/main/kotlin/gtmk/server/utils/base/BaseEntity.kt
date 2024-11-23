@@ -13,6 +13,6 @@ abstract class BaseEntity {
 
     @Column(name = "created_at")
     @CreatedDate
-    var createdDate: LocalDateTime? = null
+    val createdDate: LocalDateTime? = null
 
 }

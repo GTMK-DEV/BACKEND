@@ -1,11 +1,12 @@
-package gtmk.server.utils.users
+package gtmk.server.service
 
-import com.fasterxml.jackson.databind.ser.Serializers.Base
+import gtmk.server.domain.Users
+import gtmk.server.repository.users.UsersRepository
 import gtmk.server.utils.base.ErrorCode
+import gtmk.server.api.dto.users.UsersSignInReq
+import gtmk.server.api.dto.users.UsersSignUpReq
 import org.example.hmsspringboot.utils.base.BaseException
-import org.example.hmsspringboot.utils.base.BaseResponseStatus
 import org.springframework.stereotype.Service
-import kotlin.math.log
 
 @Service
 class UsersService(
@@ -38,7 +39,7 @@ class UsersService(
      */
     fun signUp(req: UsersSignUpReq) {
 
-        val newUsers = Users(req.phoneNumber, req.password, req.nickName, req.email)
+        val newUsers = Users(req.phoneNumber, req.password, req.nickName)
 
         usersRepository.save(newUsers)
 

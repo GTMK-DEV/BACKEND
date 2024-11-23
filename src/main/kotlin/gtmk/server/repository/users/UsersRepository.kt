@@ -1,5 +1,6 @@
-package gtmk.server.utils.users
+package gtmk.server.repository.users
 
+import gtmk.server.domain.Users
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

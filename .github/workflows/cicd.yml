@@ -1,0 +1,90 @@
+# github repository Actions 페이지에 나타낼 이름
+name: CI/CD
+
+# event trigger
+on:
+  push:
+    branches: ["develop"]
+
+permissions:
+  contents: read
+
+jobs:
+  CI-CD:
+    runs-on: ubuntu-latest
+    steps:
+
+    ## jdk setting
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    ## gradle caching
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    ## create application.yml
+    - name: application.yml 설정
+      run: |
+        cd ./src/main
+        mkdir resources
+        cd ./resources
+        touch ./application.yml
+        echo "$APPLICATION_MAIN" > ./application.yml
+      env:
+        APPLICATION_MAIN: ${{ secrets.APPLICATION_MAIN }}
+
+
+    ## gradle build
+    - name: Build with Gradle
+      run: ./gradlew build -x test
+
+    ## docker build & push to production
+    - name: Docker build & push to prod
+      run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_REPO }}:latest .
+          docker push ${{ secrets.DOCKER_REPO }}
+        
+        
+
+      ## deploy to develop
+    - name: Deploy to dev
+      uses: appleboy/ssh-action@master
+      with:
+        username: ubuntu
+        host: ${{ secrets.HOST }}
+        key: ${{secrets.KEY }}
+        port: 22
+        script: |
+          sudo docker stop gtmk-server || true
+          sudo docker rm gtmk-server || true
+          sudo docker image rm ${{ secrets.DOCKER_REPO }}
+          sudo docker pull ${{ secrets.DOCKER_REPO }}
+          sudo docker run -d -p 8080:8080 --name=gtmk-server ${{ secrets.DOCKER_REPO }}
+
+  ## time
+  current-time:
+    needs: CI-CD
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Current Time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH:mm:ss
+          utcOffset: "+09:00" # 기준이 UTC이기 때문에 한국시간인 KST를 맞추기 위해 +9시간 추가
+
+      - name: Print Current Time
+        run: echo "Current Time=${{steps.current-time.outputs.formattedTime}}" # current-time 에서 지정한 포맷대로 현재 시간 출력
+        shell: bash

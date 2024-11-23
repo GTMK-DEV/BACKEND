@@ -1,7 +1,6 @@
 package gtmk.server.utils.auth
 
 import gtmk.server.utils.base.ErrorCode
-import gtmk.server.utils.users.CustomUsers
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
