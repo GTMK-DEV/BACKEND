@@ -67,7 +67,7 @@ dependencies {
 	implementation("com.amazonaws:aws-java-sdk-s3:1.12.232")
 
 	//Redis
-//	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
 }
 

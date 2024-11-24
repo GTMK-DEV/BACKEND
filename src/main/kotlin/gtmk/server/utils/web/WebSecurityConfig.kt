@@ -34,7 +34,7 @@ class WebSecurityConfig(
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .cors { it.configurationSource(corsConfigurationSource()) } // CORS 관련 설정
             .authorizeHttpRequests {
-                it.requestMatchers("/actuator/health", "/users", "/users/login", "/users/token/reissue", "/error").permitAll()
+                it.requestMatchers("/actuator/health", "/users", "/users/login","/users/signUp","/store/signUp","/store/login", "/users/token/reissue", "/error").permitAll()
                 .anyRequest().authenticated()
 
 //                        "/api/member/find/**", "/api/member/signup/**", "/api/member/login/oauth2", "/api/member/login", "/api/member/token/refresh/issue")
@@ -77,3 +77,4 @@ class WebSecurityConfig(
     }
 
 }
+

@@ -1,29 +1,30 @@
 package gtmk.server.domain
 
+import gtmk.server.utils.base.BaseEntity
 import jakarta.persistence.*
-import org.example.hmsspringboot.utils.base.BaseEntity
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "store")
-class Store(
+data class Store(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long? = null,
+     val id: Long? = null,
 
-    private var storeName: String? = null,
-    private var phoneNumber: String? = null,
-    private var account: String? = null,
-    private var password: String? = null,
-    private var location: String? = null,
-    private var lastEditedAt: LocalDateTime? = null
+     var storeName: String? = null,
+     var phoneNumber: String? = null,
+     var account: String? = null,
+     var password: String? = null,
+     var location: String? = null,
+     var lastEditedAt: LocalDateTime? = null
+
 ) : BaseEntity() {
 
     companion object {
         fun from(id: Long) = Store(id = id)
 
         fun of(
-            id: Long?,
+//            id: Long?,
             storeName: String,
             phoneNumber: String,
             account: String,
@@ -31,7 +32,7 @@ class Store(
             location: String,
             lastEditedAt: LocalDateTime
         ) = Store(
-            id = id,
+            id = null,
             storeName = storeName,
             phoneNumber = phoneNumber,
             account = account,

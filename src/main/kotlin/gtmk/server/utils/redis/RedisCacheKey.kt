@@ -1,4 +1,3 @@
-package org.example.hmsspringboot.utils.redis
 
 import org.springframework.stereotype.Component
 

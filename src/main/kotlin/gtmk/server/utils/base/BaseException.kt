@@ -1,4 +1,4 @@
-package org.example.hmsspringboot.utils.base
+package gtmk.server.utils.base
 
 import gtmk.server.utils.base.ErrorCode
 import org.springframework.http.HttpStatus

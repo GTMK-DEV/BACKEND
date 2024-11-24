@@ -1,7 +1,7 @@
 package gtmk.server.domain
 
+import gtmk.server.utils.base.BaseEntity
 import jakarta.persistence.*
-import org.example.hmsspringboot.utils.base.BaseEntity
 
 @Entity
 @Table(name = "account_book_user")
@@ -17,7 +17,7 @@ class AccountBookUser(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private val accountBook: AccountBook,
-) :BaseEntity(){
+) : BaseEntity(){
     companion object {
         fun of(id: Long?, user: Users, accountBook: AccountBook) = AccountBookUser(
             id = id,

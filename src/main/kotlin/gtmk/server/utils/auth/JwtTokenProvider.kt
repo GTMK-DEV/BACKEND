@@ -5,7 +5,7 @@ import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SignatureException
-import org.example.hmsspringboot.utils.auth.JwtTokenInfoDto
+import gtmk.server.api.dto.users.TokenInfoRes
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -33,7 +33,7 @@ class JwtTokenProvider {
     private val accessKey by lazy { Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessSecretKey)) }
     private val refreshKey by lazy { Keys.hmacShaKeyFor(Decoders.BASE64.decode(refreshSecretKey)) }
 
-    fun createToken(authentication: Authentication): JwtTokenInfoDto {
+    fun createToken(authentication: Authentication): TokenInfoRes {
         val authorities: String = authentication
                 .authorities
                 .joinToString(",", transform = GrantedAuthority::getAuthority)
@@ -59,7 +59,7 @@ class JwtTokenProvider {
                 .signWith(refreshKey, SignatureAlgorithm.HS256)
                 .compact()
 
-        return JwtTokenInfoDto("Bearer", accessToken, refreshToken)
+        return TokenInfoRes("Bearer", accessToken, refreshToken)
     }
 
     fun getAuthentication(token: String): Authentication {
@@ -74,7 +74,7 @@ class JwtTokenProvider {
         return UsernamePasswordAuthenticationToken(principal, "", authorities)
     }
 
-    fun validateRefreshTokenAndCreateToken(refreshToken: String): JwtTokenInfoDto {
+    fun validateRefreshTokenAndCreateToken(refreshToken: String): TokenInfoRes {
         try {
             val refreshClaims: Claims = getRefreshTokenClaims(refreshToken)
             val now = Date()
@@ -89,7 +89,7 @@ class JwtTokenProvider {
                     .signWith(accessKey, SignatureAlgorithm.HS256)
                     .compact()
 
-            return JwtTokenInfoDto("Bearer", newAccessToken, refreshToken)
+            return TokenInfoRes("Bearer", newAccessToken, refreshToken)
         } catch (e: Exception) {
             throw e
         }

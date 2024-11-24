@@ -1,4 +1,4 @@
-package org.example.hmsspringboot.utils.base
+package gtmk.server.utils.base
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners

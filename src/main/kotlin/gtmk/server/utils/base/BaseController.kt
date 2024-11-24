@@ -2,7 +2,6 @@ package gtmk.server.utils.base
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import io.jsonwebtoken.JwtException
-import org.example.hmsspringboot.utils.base.BaseException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException

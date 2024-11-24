@@ -1,7 +1,7 @@
 package gtmk.server.domain
 
+import gtmk.server.utils.base.BaseEntity
 import jakarta.persistence.*
-import org.example.hmsspringboot.utils.base.BaseEntity
 
 @Entity
 @Table(name = "books_history")
@@ -20,7 +20,7 @@ class BooksHistory(
 
     @Enumerated(EnumType.STRING)
     private val status: Status? = null,
-) :BaseEntity(){
+) : BaseEntity(){
     companion object {
         fun of(id: Long?,book: AccountBook, balance: Long?, spendAmount: Long?, status: Status): BooksHistory {
             return BooksHistory(

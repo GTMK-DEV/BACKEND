@@ -1,6 +1,6 @@
-package org.example.hmsspringboot.utils.auth
+package gtmk.server.api.dto.users
 
-class JwtTokenInfoDto(
+data class TokenInfoRes(
         val grantType: String,
         val accessToken: String,
         val refreshToken: String

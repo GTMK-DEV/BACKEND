@@ -1,5 +1,4 @@
-package org.example.hmsspringboot.utils.querydsl
-
+package gtmk.server.utils.querydsl
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext

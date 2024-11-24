@@ -1,7 +1,7 @@
 package gtmk.server.domain
 
+import gtmk.server.utils.base.BaseEntity
 import jakarta.persistence.*
-import org.example.hmsspringboot.utils.base.BaseEntity
 import java.time.LocalDateTime
 
 @Entity

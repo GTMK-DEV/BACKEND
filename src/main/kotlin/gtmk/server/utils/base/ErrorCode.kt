@@ -18,6 +18,8 @@ enum class ErrorCode (
     INVALID_DATE_TIME_FORM(404, "날짜/시간 형식이 올바르지 않습니다 : yyyy-mm-dd, yyyy-mm-dd hh:mm:ss, hh:mm:ss"),
 
     BAD_ID_AND_PASSWORD(404, "아이디 비밀번호가 일치하지 않습니다."),
+    NOT_FOUND_USERS(404, "유저를 찾을 수 없습니다."),
+    NOT_FOUND_STORE(404, "가게를 찾을 수 없습니다."),
 
 
 }

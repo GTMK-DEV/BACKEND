@@ -1,9 +1,7 @@
 package gtmk.server.api.controller
 
-import gtmk.server.api.dto.users.TokenInfoRes
+import gtmk.server.api.dto.users.*
 import gtmk.server.service.UsersService
-import gtmk.server.api.dto.users.UsersSignInReq
-import gtmk.server.api.dto.users.UsersSignUpReq
 import lombok.RequiredArgsConstructor
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,24 +9,24 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/store")
 @RequiredArgsConstructor
-class UsersController(
+class StoreController(
     val usersService: UsersService
 ) {
 
     @PostMapping("/signUp")
     fun singUp(
-        @RequestBody req: UsersSignUpReq
+        @RequestBody req: StoreSignUpReq,
     ) {
-        usersService.signUp("users",req)
+        usersService.signUp("store",req)
     }
 
     @PostMapping("/login")
     fun signIn(
-        @RequestBody req: UsersSignInReq
+        @RequestBody req: StoreSignInReq,
     ):TokenInfoRes {
-       return usersService.signIn("users",req)
+        return usersService.signIn("store",req)
     }
 
 }
