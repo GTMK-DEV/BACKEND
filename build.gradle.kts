@@ -9,6 +9,10 @@ plugins {
 	kotlin("kapt") version "1.9.21"
 }
 
+tasks.bootJar {
+	archiveFileName.set("backend.jar")
+}
+
 group = "gtmk"
 version = "0.0.1-SNAPSHOT"
 
