@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 public class HealthyController {
     @GetMapping("/")
-    public fun healthy(): String {return "Hello World"}
+    public fun healthy(): String {return "test hello world"}
 }
