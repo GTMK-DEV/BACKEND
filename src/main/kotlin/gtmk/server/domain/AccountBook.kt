@@ -2,6 +2,7 @@ package gtmk.server.domain
 
 import gtmk.server.utils.base.BaseEntity
 import jakarta.persistence.*
+import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDateTime
 
 @Entity
@@ -9,37 +10,40 @@ import java.time.LocalDateTime
 class AccountBook(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long? = null,
+    val id: Long? = null,
 
-    private var bookTitle: String? = null,
+    var bookTitle: String,
 
-    private var randomCode: String? = null,
+    var randomCode: String,
 
-    private var price: Long? = 0,
+    var price: Long = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
-    private val store: Store?,
+    val store: Store?,
 
-    private var lastEditedAt: LocalDateTime? = null
+    @LastModifiedDate
+    var lastEditedAt: LocalDateTime? = null
 
 ) : BaseEntity(){
     companion object {
-        fun from(id : Long) = AccountBook(id, null, null, null, null)
+//        fun from(id : Long) = AccountBook(id, null, null, null, null)
         fun of(
-            id: Long?,
+//            id: Long?,
             bookTitle: String,
             randomCode: String,
             price: Long,
             store: Store,
-            lastEditedAt: LocalDateTime
+//            lastEditedAt: LocalDateTime
         ) = AccountBook(
-            id = id,
+//            id = id,
             bookTitle = bookTitle,
             randomCode = randomCode,
             price = price,
             store = store,
-            lastEditedAt = lastEditedAt
+//            lastEditedAt = lastEditedAt
         )
+
+
     }
 }

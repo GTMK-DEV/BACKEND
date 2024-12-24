@@ -2,6 +2,7 @@ package gtmk.server.domain
 
 import gtmk.server.utils.base.BaseEntity
 import jakarta.persistence.*
+import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDateTime
 
 @Entity
@@ -10,13 +11,13 @@ data class Store(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
      val id: Long? = null,
-
      var storeName: String? = null,
      var phoneNumber: String? = null,
      var account: String? = null,
      var password: String? = null,
      var location: String? = null,
-     var lastEditedAt: LocalDateTime? = null
+    @LastModifiedDate
+    var lastEditedAt: LocalDateTime? = null
 
 ) : BaseEntity() {
 
@@ -30,20 +31,17 @@ data class Store(
             account: String,
             password: String,
             location: String,
-            lastEditedAt: LocalDateTime
+//            lastEditedAt: LocalDateTime
         ) = Store(
-            id = null,
+//            id = null,
             storeName = storeName,
             phoneNumber = phoneNumber,
             account = account,
             password = password,
             location = location,
-            lastEditedAt = lastEditedAt
+//            lastEditedAt = lastEditedAt
         )
     }
 
-    fun updateLastEditedAt() {
-        this.lastEditedAt = LocalDateTime.now()
-    }
 }
 
