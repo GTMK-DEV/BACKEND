@@ -4,6 +4,7 @@ import gtmk.server.api.dto.users.TokenInfoRes
 import gtmk.server.service.UsersService
 import gtmk.server.api.dto.users.UsersSignInReq
 import gtmk.server.api.dto.users.UsersSignUpReq
+import gtmk.server.domain.UserType
 import lombok.RequiredArgsConstructor
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -21,14 +22,14 @@ class UsersController(
     fun singUp(
         @RequestBody req: UsersSignUpReq
     ) {
-        usersService.signUp("users",req)
+        usersService.signUp(UserType.USER,req)
     }
 
     @PostMapping("/login")
     fun signIn(
         @RequestBody req: UsersSignInReq
     ):TokenInfoRes {
-       return usersService.signIn("users",req)
+       return usersService.signIn(UserType.USER,req)
     }
 
 }

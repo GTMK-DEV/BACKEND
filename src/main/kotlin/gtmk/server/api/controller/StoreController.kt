@@ -1,6 +1,7 @@
 package gtmk.server.api.controller
 
 import gtmk.server.api.dto.users.*
+import gtmk.server.domain.UserType
 import gtmk.server.service.UsersService
 import lombok.RequiredArgsConstructor
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,14 +20,14 @@ class StoreController(
     fun singUp(
         @RequestBody req: StoreSignUpReq,
     ) {
-        usersService.signUp("store",req)
+        usersService.signUp(UserType.STORE,req)
     }
 
     @PostMapping("/login")
     fun signIn(
         @RequestBody req: StoreSignInReq,
     ):TokenInfoRes {
-        return usersService.signIn("store",req)
+        return usersService.signIn(UserType.STORE,req)
     }
 
 }
